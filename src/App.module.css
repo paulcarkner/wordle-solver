@@ -1,0 +1,14 @@
+.app {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  height: 100vh;
+}
+
+header {
+  font-family: 'nyt-karnakcondensed', sans-serif;
+  font-weight: 700;
+  font-size: 2.25em;
+  text-align: center;
+  padding-block: 1.5rem;
+  border-bottom: 1px solid var(--clr-grey);
+}

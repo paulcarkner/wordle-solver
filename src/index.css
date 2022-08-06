@@ -1,0 +1,22 @@
+@font-face {
+  font-family: 'nyt-karnakcondensed';
+  src: url(/public/Assets/Fonts/karnakcondensed-normal-700.woff2);
+}
+
+:root {
+  --clr-grey: #d3d6da;
+  --clr-dark-grey: #878a8c;
+  --clr-letter-missing: #787c7e;
+  --clr-letter-present: #c9b458;
+  --clr-letter-correct: #6aaa64;
+}
+
+body {
+  font-size: 16px;
+  line-height: 1em;
+  margin: 0;
+  color: #000;
+  font-family: 'Clear Sans', 'Helvetica Neue', Arial, sans-serif;
+  font-weight: bold;
+  user-select: none;
+}
