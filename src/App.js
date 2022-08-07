@@ -54,6 +54,12 @@ export default class App extends React.Component {
     });
   };
 
+  updatePossibleLetters = () => {
+    for (const word of this.state.words) {
+      console.log(word);
+    }
+  }
+
   getSuggestions = () => {
     let wordList = processor.wordList;
     
@@ -147,6 +153,7 @@ export default class App extends React.Component {
       }
     }
     this.setState({ step: "input", wordPos: this.state.wordPos + 1, coloringIndex: "" }, () => {
+      this.updatePossibleLetters();
       this.getSuggestions();
     });
   };
