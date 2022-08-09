@@ -34,12 +34,12 @@ class KeyRow extends React.Component {
             key={index}
             className={
               Style.key +
-              (this.props.gameState.correct.includes(k)
+              (this.props.gameState.possibleLetters.includes(k)
                 ? " " + StateStyle.correct
-                : this.props.gameState.present.flat().includes(k)
-                ? " " + StateStyle.present
-                : this.props.gameState.missing.includes(k)
+                : this.props.gameState.possibleLetters.join("").indexOf(k) === -1
                 ? " " + StateStyle.missing
+                : this.props.gameState.words.join("").indexOf(k) !== -1
+                ? " " + StateStyle.present
                 : "")
             }
             onClick={() => this.keyHandler(k)}

@@ -1,0 +1,13 @@
+.sideBar {
+  grid-row: 1 / -1;
+  grid-column: 2;
+  border-left: 1px solid var(--clr-grey);
+  padding: 1em;
+  font-weight: normal;
+  overflow: auto;
+}
+
+.title {
+    margin-bottom: 1em;
+    font-weight: bold;
+}
