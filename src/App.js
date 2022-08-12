@@ -347,7 +347,7 @@ export default class App extends React.Component {
     return (
       <div className={Style.app}>
         <header>WordleSolver</header>
-        <SideBar words={this.state.possibleWords} />
+        <SideBar step={this.state.step} words={this.state.possibleWords} />
         <Board
           gameState={this.state}
           handleColorClick={this.handleColorClick}
