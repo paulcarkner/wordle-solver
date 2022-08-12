@@ -2,12 +2,20 @@
   grid-row: 1 / -1;
   grid-column: 2;
   border-left: 1px solid var(--clr-grey);
-  padding: 1em;
   font-weight: normal;
   overflow: auto;
 }
 
+.sideBar > * {
+  padding: 1em;
+}
+
+.instructions {
+  background-color: hsl(100deg, 60%, 95%);
+  border-bottom: 1px solid var(--clr-grey);
+}
+
 .title {
-    margin-bottom: 1em;
-    font-weight: bold;
+  font-weight: bold;
+  margin-bottom: 1em;
 }

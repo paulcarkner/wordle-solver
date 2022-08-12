@@ -36,7 +36,8 @@ class KeyRow extends React.Component {
               Style.key +
               (this.props.gameState.possibleLetters.includes(k)
                 ? " " + StateStyle.correct
-                : this.props.gameState.possibleLetters.join("").indexOf(k) === -1
+                : this.props.gameState.possibleLetters.join("").indexOf(k) ===
+                  -1
                 ? " " + StateStyle.missing
                 : this.props.gameState.words.join("").indexOf(k) !== -1
                 ? " " + StateStyle.present

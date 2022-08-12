@@ -1,5 +1,5 @@
 @font-face {
-  font-family: 'nyt-karnakcondensed';
+  font-family: "nyt-karnakcondensed";
   src: url(/public/Assets/Fonts/karnakcondensed-normal-700.woff2);
 }
 
@@ -16,7 +16,7 @@ body {
   line-height: 1em;
   margin: 0;
   color: #000;
-  font-family: 'Clear Sans', 'Helvetica Neue', Arial, sans-serif;
+  font-family: "Clear Sans", "Helvetica Neue", Arial, sans-serif;
   font-weight: bold;
   user-select: none;
 }

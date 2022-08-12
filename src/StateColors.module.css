@@ -1,17 +1,17 @@
 .correct {
-    color: white;
-    background-color: var(--clr-letter-correct) !important;
-    border: none;
+  color: white;
+  background-color: var(--clr-letter-correct) !important;
+  border: none;
 }
 
 .present {
-    color: white;
-    background-color: var(--clr-letter-present) !important;
-    border: none;
+  color: white;
+  background-color: var(--clr-letter-present) !important;
+  border: none;
 }
 
 .missing {
-    color: white;
-    background-color: var(--clr-letter-missing) !important;
-    border: none;
+  color: white;
+  background-color: var(--clr-letter-missing) !important;
+  border: none;
 }

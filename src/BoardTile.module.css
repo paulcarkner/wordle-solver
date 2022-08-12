@@ -1,14 +1,14 @@
 .coloringPopup {
-    position: absolute;
-    bottom: calc(100% + 3px);
-    left: 0;
-    right: 0;
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+  position: absolute;
+  bottom: calc(100% + 3px);
+  left: 0;
+  right: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
 }
 
 .coloringPopupButton {
-    display: block;
-    aspect-ratio: 1 / 1;
-    border: 1px solid #0004;
+  display: block;
+  aspect-ratio: 1 / 1;
+  border: 1px solid #0004;
 }
