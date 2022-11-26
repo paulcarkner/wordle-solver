@@ -1,6 +1,6 @@
 @font-face {
   font-family: "nyt-karnakcondensed";
-  src: url(/public/Assets/Fonts/karnakcondensed-normal-700.woff2);
+  src: url(./Assets/karnakcondensed-normal-700.woff2);
 }
 
 :root {
