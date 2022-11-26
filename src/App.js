@@ -9,7 +9,7 @@ import * as processor from "./Utils/processor.js";
 
 const alphabet = "abcdefghijklmnopqrstuvwxyz";
 
-export default class App extends React.Component {
+export class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
