@@ -1,5 +1,6 @@
 import React from "react";
 import "reset-css";
+import "./Assets/karnakcondensed-normal-700.woff2";
 import Style from "./App.module.css";
 
 import Board from "./Board";
@@ -19,7 +20,7 @@ const bodyStyles = {
   fontFamily: "'Clear Sans', 'Helvetica Neue', Arial, sans-serif",
   fontWeight: "bold",
   userSelect: "none",
-}
+};
 
 export default class App extends React.Component {
   constructor(props) {
@@ -53,12 +54,12 @@ export default class App extends React.Component {
     };
   }
 
-  componenetWillMount = () => {
-    //Set HTML and BODY styles programatically
-    for (let key in bodyStyles) document.body.style[key] = bodyStyles[key];
-  }
+  componenetWillMount = () => {};
 
   componentDidMount = () => {
+    //Set HTML and BODY styles programatically
+    for (let key in bodyStyles) document.body.style[key] = bodyStyles[key];
+
     //console.log({name: arguments.callee.name, args: arguments});
     if (!this.keyListenerAdded) {
       //needed to prevent debugger from firing keyup a second time
@@ -371,7 +372,10 @@ export default class App extends React.Component {
           handleTileClick={this.handleTileClick}
         />
         <Keyboard gameState={this.state} />
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0"
+        />
       </div>
     );
   };
