@@ -9,6 +9,17 @@ import * as processor from "./Utils/processor.js";
 
 const alphabet = "abcdefghijklmnopqrstuvwxyz";
 
+//Styles set programatically so App can be used as sub-module in portfolio
+const bodyStyles = {
+  fontSize: "16px",
+  lineHeight: "1em",
+  margin: 0,
+  color: "#000",
+  fontFamily: "'Clear Sans', 'Helvetica Neue', Arial, sans-serif",
+  fontWeight: "bold",
+  userSelect: "none",
+}
+
 export default class App extends React.Component {
   constructor(props) {
     super(props);
@@ -39,6 +50,11 @@ export default class App extends React.Component {
       ),
       possibleWords: [],
     };
+  }
+
+  componenetWillMount = () => {
+    //Set HTML and BODY styles programatically
+    for (let key in bodyStyles) document.body.style[key] = bodyStyles[key];
   }
 
   componentDidMount = () => {
@@ -354,6 +370,7 @@ export default class App extends React.Component {
           handleTileClick={this.handleTileClick}
         />
         <Keyboard gameState={this.state} />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
       </div>
     );
   };
