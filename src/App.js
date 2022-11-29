@@ -1,4 +1,5 @@
 import React from "react";
+import "reset-css";
 import Style from "./App.module.css";
 
 import Board from "./Board";
