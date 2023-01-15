@@ -4,7 +4,7 @@ import StateStyle from "./StateColors.module.css";
 
 class KeyRow extends React.Component {
   keyHandler = (key) => {
-    //console.log(key);
+    //use keypress events to lift letter click to app
     window.dispatchEvent(
       new KeyboardEvent("keyup", {
         key: key,
@@ -15,9 +15,9 @@ class KeyRow extends React.Component {
   render() {
     return (
       <div className={Style.keyRow}>
-        {this.props.prepend ? (
+        {this.props.prepend ? ( //add prepended ENTER keys
           <div
-            className={Style.key + " " + Style.funcKey}
+            className={Style.key + " " + Style.funcKey} //style as function key
             onClick={() =>
               window.dispatchEvent(
                 new KeyboardEvent("keyup", {
@@ -29,18 +29,18 @@ class KeyRow extends React.Component {
             ENTER
           </div>
         ) : null}
-        {this.props.keys.split("").map((k, index) => (
+        {this.props.keys.split("").map((k, index) => ( //add each letter to row
           <div
             key={index}
             className={
               Style.key +
               (this.props.gameState.possibleLetters.includes(k)
-                ? " " + StateStyle.correct
+                ? " " + StateStyle.correct //if letter is known to correct
                 : this.props.gameState.possibleLetters.join("").indexOf(k) ===
                   -1
-                ? " " + StateStyle.missing
+                ? " " + StateStyle.missing //if letter is known to be missing
                 : this.props.gameState.words.join("").indexOf(k) !== -1
-                ? " " + StateStyle.present
+                ? " " + StateStyle.present //if letter is known to be present
                 : "")
             }
             onClick={() => this.keyHandler(k)}
@@ -48,9 +48,9 @@ class KeyRow extends React.Component {
             {k}
           </div>
         ))}
-        {this.props.append ? (
+        {this.props.append ? ( //add appended DEL keys
           <div
-            className={Style.key + " " + Style.funcKey}
+            className={Style.key + " " + Style.funcKey} //style as function key
             onClick={() =>
               window.dispatchEvent(
                 new KeyboardEvent("keyup", {

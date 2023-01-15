@@ -3,14 +3,14 @@ import Style from "./BoardTile.module.css";
 
 export default class BoardTile extends React.Component {
   handleTileClick = () => {
-    this.props.handleTileClick(this.props.dataKey);
+    this.props.handleTileClick(this.props.dataKey); //if tile is clicked send event with tile index to app
   };
 
   render() {
     return (
       <div className={this.props.className} onClick={this.handleTileClick}>
         {this.props.children}
-        {this.props.isColoring ? (
+        {this.props.isColoring ? ( //if tile is being coloured show options
           <div className={Style.coloringPopup}>
             <button
               className={Style.coloringPopupButton}

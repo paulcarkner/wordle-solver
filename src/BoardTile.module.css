@@ -1,6 +1,6 @@
 .coloringPopup {
   position: absolute;
-  bottom: calc(100% + 3px);
+  bottom: calc(100% + 3px); /* position 3px above tile */
   left: 0;
   right: 0;
   display: grid;
@@ -9,6 +9,6 @@
 
 .coloringPopupButton {
   display: block;
-  aspect-ratio: 1 / 1;
+  aspect-ratio: 1 / 1; /* make buttons square */
   border: 1px solid #0004;
 }

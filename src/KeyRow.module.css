@@ -1,6 +1,5 @@
 .keyRow {
   display: flex;
-  /* grid-template-columns: repeat(auto-fit, 3em); */
   text-align: center;
   justify-content: center;
   gap: 0.375rem;

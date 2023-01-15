@@ -26,9 +26,10 @@ export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      words: [null, null, null, null, null, null],
-      wordIsValid: null,
-      wordPos: 0,
+      //initial variables
+      words: [null, null, null, null, null, null], //list of guessed words
+      wordIsValid: null, //flag for error styling
+      wordPos: 0, //current word index
       colors: [
         ["", "", "", "", ""],
         ["", "", "", "", ""],
@@ -36,41 +37,39 @@ export default class App extends React.Component {
         ["", "", "", "", ""],
         ["", "", "", "", ""],
         ["", "", "", "", ""],
-      ],
-      coloringIndex: "",
-      placeholder: "     ",
-      step: "input",
-      keyListenerAdded: false,
+      ], //table of letter colours/status
+      coloringIndex: "", //current letter during colouring step
+      placeholder: "     ", //placeholder of top suggestion shown as shadow in next word
+      step: "input", //current step ["input" for typing, "color" for marking letter colours]
+      keyListenerAdded: false, //flag to prevent debugger triggering letter press twice
 
-      possibleLetters: new Array(5).fill(alphabet),
+      //solver variables
+      possibleLetters: new Array(5).fill(alphabet), //list of remaining potential letters in each word
       minMaxLetters: Object.fromEntries(
         new Map(
           new Array(26).fill("").map((x, i) => {
             return [alphabet[i], { min: 0, max: 5 }];
           })
         )
-      ),
-      possibleWords: [],
+      ), //list of minimum/maximum number of occurances in potential words of each letter from the alphabet, starts as min:0, max:5
+      possibleWords: [], //list of potential words based on inputs
     };
   }
-
-  componenetWillMount = () => {};
 
   componentDidMount = () => {
     //Set HTML and BODY styles programatically
     for (let key in bodyStyles) document.body.style[key] = bodyStyles[key];
+    document.title = "WordleSolver";
 
-    //console.log({name: arguments.callee.name, args: arguments});
     if (!this.keyListenerAdded) {
       //needed to prevent debugger from firing keyup a second time
       window.addEventListener("keyup", this.keyPressHandler);
       this.setState({ keyListenerAdded: true });
     }
-
-    //this.getSuggestions();
   };
 
   updatePossibleLetters = async () => {
+    //manipulate copy of current state the setState with updated values at end of function
     let stateCopy = this.state;
 
     //reset letter filters
@@ -83,6 +82,7 @@ export default class App extends React.Component {
       )
     );
 
+    //loop through each entered word reducing potential letter list and min/max letter counts
     for (
       let wordIndex = 0;
       wordIndex < this.state.words.filter((word) => word !== null).length;
@@ -90,14 +90,18 @@ export default class App extends React.Component {
     ) {
       let word = this.state.words[wordIndex];
       let letterCount = {};
+
+      //look through word letters
       for (let letterIndex = 0; letterIndex < 5; letterIndex++) {
         let letter = word[letterIndex];
         if (!letterCount[letter])
-          letterCount[letter] = { count: 0, locations: [], colors: [] };
-        letterCount[letter].count++;
-        letterCount[letter].locations.push(letterIndex);
+          letterCount[letter] = { count: 0, locations: [], colors: [] }; //if letter is not in counter, add it
+        letterCount[letter].count++; //increment letter count object
+        letterCount[letter].locations.push(letterIndex); //add letter position to letter count object
         const letterColor = this.state.colors[wordIndex][letterIndex];
-        letterCount[letter].colors.push(letterColor);
+        letterCount[letter].colors.push(letterColor); //add letter colour to letter count object
+
+        //if letter in not in current position, remove it from array of possible letters in this position
         if (letterColor === "missing" || letterColor === "present")
           stateCopy.possibleLetters = stateCopy.possibleLetters.map(
             (possibleLetter, i) =>
@@ -109,13 +113,15 @@ export default class App extends React.Component {
                 : possibleLetter
           );
 
+        //if letter is correct remove all other letters from array of possible letters in this position
         if (letterColor === "correct")
           stateCopy.possibleLetters = stateCopy.possibleLetters.map(
             (possibleLetter, i) => (i === letterIndex ? letter : possibleLetter)
           );
       }
+
       Object.keys(letterCount).forEach(async (letter) => {
-        //remove letter from unknow positions if "missing" and no "present"
+        //remove letter from unknow positions if "missing" and not "present"
         if (
           letterCount[letter].colors.includes("missing") &&
           !letterCount[letter].colors.includes("present")
@@ -176,22 +182,27 @@ export default class App extends React.Component {
       return;
     }
 
+    //update state
     this.setState(stateCopy, () => {
-      this.getSuggestions();
+      this.getSuggestions(); //get list of remaining potential words
     });
   };
 
+  //generate list of remaining potential words
   getSuggestions = () => {
+    //create regex to reduce master list based on possible letters
     const letterLocationRegex = new RegExp(
       "^" +
         this.state.possibleLetters
           .map((letters) => "[" + letters + "]")
           .join("") +
         "$"
-    );
+    ); //regex has form "^[abc...xyz][abc...xyz][abc...xyz][abc...xyz][abc...xyz]$" with letter options removed
+
     const wordList = processor.wordList
-      .filter((word) => letterLocationRegex.test(word))
+      .filter((word) => letterLocationRegex.test(word)) //perform regex test on word list
       .filter((word) => {
+        //further reduce list based on min/max number of letters allowed
         for (const letter of alphabet) {
           if (
             this.state.minMaxLetters[letter].min === 0 &&
@@ -208,6 +219,7 @@ export default class App extends React.Component {
         return true;
       });
 
+    //for possible words, compare letters of word with possibles to count number of occurances
     const wCount = wordList
       .map((x) => {
         return {
@@ -220,9 +232,9 @@ export default class App extends React.Component {
             wordList.filter((y) => y.indexOf(x[4]) === 4).length,
         };
       })
-      .sort((a, b) => (a.count > b.count ? -1 : 1));
+      .sort((a, b) => (a.count > b.count ? -1 : 1)); //sort list by words with highest letter occurances
 
-    //console.log(wCount);
+    //update word list
     this.setState({
       placeholder: wCount.length === 0 ? "" : wCount[0].word,
       possibleWords: wCount,
@@ -230,12 +242,11 @@ export default class App extends React.Component {
   };
 
   keyPressHandler = (e) => {
-    //console.log(e);
-    if (this.state.step !== "input") return;
+    if (this.state.step !== "input") return; //only capture keypress during "input" step
 
     if (/^[a-zA-Z]$/.test(e.key)) {
+      //check for valid letter
       //letter pressed
-      //console.log("letter");
       this.addLetter(e.key.toLowerCase());
       return;
     }
@@ -248,7 +259,6 @@ export default class App extends React.Component {
 
     if (e.keyCode === 46 || e.keyCode === 8) {
       //backpsace or delete pressed
-      //console.log("delete");
       this.removeLetter();
       return;
     }
@@ -256,50 +266,45 @@ export default class App extends React.Component {
 
   addLetter = (letter) => {
     //console.log(letter);
-    if (this.state.words[this.state.wordPos]?.length === 5) return;
+    if (this.state.words[this.state.wordPos]?.length === 5) return; //only allow 5 letters
     let wordsCopy = this.state.words;
     let currentWord = wordsCopy[this.state.wordPos];
-    currentWord = (currentWord || "") + letter;
+    currentWord = (currentWord || "") + letter; //add letter to current word
     wordsCopy[this.state.wordPos] = currentWord;
-    this.setState(
-      {
-        words: wordsCopy,
-        wordIsValid:
-          currentWord.length === 5 ? processor.checkWord(currentWord) : null,
-      } //,
-      //() => this.updateColors()
-    );
+    this.setState({
+      words: wordsCopy,
+      wordIsValid:
+        currentWord.length === 5 ? processor.checkWord(currentWord) : null, //check if entered word is valid and set flag
+    });
   };
 
   removeLetter = () => {
-    if (this.state.words[this.state.wordPos]?.length === 0) return;
+    if (this.state.words[this.state.wordPos]?.length === 0) return; //exit if word has no letters
     let wordsCopy = this.state.words;
     let currentWord = wordsCopy[this.state.wordPos];
-    currentWord = currentWord.slice(0, -1);
+    currentWord = currentWord.slice(0, -1); //remove last letter
     wordsCopy[this.state.wordPos] = currentWord;
-    this.setState(
-      { words: wordsCopy, wordIsValid: null } //, () =>
-      //this.updateColors()
-    );
+    this.setState({ words: wordsCopy, wordIsValid: null });
   };
 
   submitWord = () => {
-    //let gameState = this.state;
+    //check if word is complete and valid
     if (
       this.state.words[this.state.wordPos]?.length !== 5 ||
       !this.state.wordIsValid
     )
       return;
 
-    this.initColoring();
+    this.initColoring(); //initiate colouring step
   };
 
   initColoring = async () => {
-    //console.log("initColoring");
-    //console.log(this.state.colors);
+    //set step to "color"
     await new Promise((resolve) => {
       this.setState({ step: "color" }, () => resolve());
     });
+
+    //find first letter that is not coloured
     for (
       let wordPos = 0;
       wordPos < this.state.words.filter((word) => word !== null).length;
@@ -308,12 +313,14 @@ export default class App extends React.Component {
       for (let letterPos = 0; letterPos < 5; letterPos++) {
         if (this.state.colors[wordPos][letterPos] === "") {
           this.setState({
-            coloringIndex: wordPos + ":" + letterPos,
+            coloringIndex: wordPos + ":" + letterPos, //set un-coloured letter index
           });
           return;
         }
       }
     }
+
+    //if all letters coloured set step to "input" and go to next word line
     this.setState(
       {
         step: "input",
@@ -322,49 +329,43 @@ export default class App extends React.Component {
       },
       () => {
         this.updatePossibleLetters();
-        //this.getSuggestions();
       }
     );
   };
 
   handleColorClick = (color) => {
-    //console.log("handleColorClick");
-    const colorIndex = this.state.coloringIndex.split(":");
-    let colorsCopy = this.state.colors;
-    //console.log(colorIndex);
-    //console.log(colorsCopy);
-    colorsCopy[colorIndex[0]][colorIndex[1]] = color;
+    //handles when a letter colour is selected
+    const colorIndex = this.state.coloringIndex.split(":"); //get current colouring index
+    let colorsCopy = this.state.colors; //get stored colours
+    colorsCopy[colorIndex[0]][colorIndex[1]] = color; //update colour at currect index
 
-    //console.log(colorsCopy);
-    //console.log("thing" + colorsCopy[0][0] + ":" + colorsCopy[1][0] + ":" + color);
+    //store updated colours
     this.setState(
       {
         colors: colorsCopy,
-        // correct: correctCopy,
-        // present: presentCopy,
-        // missing: missingCopy,
       },
-      () => this.initColoring()
+      () => this.initColoring() //find next un-coloured letter
     );
   };
 
   handleTileClick = (tileIndexKey) => {
-    if (this.state.step === "color") return;
-    const tileIndex = tileIndexKey.split(":");
-    if (this.state.colors[tileIndex[0]][tileIndex[1]] === "") return;
+    //allow user to change previously coloured letter colour
+    if (this.state.step === "color") return; //only allow during "input" steo
+    const tileIndex = tileIndexKey.split(":"); //get clicked tile index
+    if (this.state.colors[tileIndex[0]][tileIndex[1]] === "") return; ///only allow on coloured tiles
     let colorsCopy = this.state.colors;
-    colorsCopy[tileIndex[0]][tileIndex[1]] = "";
+    colorsCopy[tileIndex[0]][tileIndex[1]] = ""; //clear stored colour for clicked tile
     let wordsCopy = this.state.words;
-    wordsCopy[this.state.wordPos] = null;
+    wordsCopy[this.state.wordPos] = null; //clear current word
     this.setState({ words: wordsCopy, colors: colorsCopy }, () =>
-      this.initColoring()
+      this.initColoring() //function will now find tile with missing colour
     );
   };
 
   render = () => {
     return (
       <div className={Style.app}>
-        <header>WordleSolver</header>
+        <header className={Style.header}>WordleSolver</header>
         <SideBar step={this.state.step} words={this.state.possibleWords} />
         <Board
           gameState={this.state}
