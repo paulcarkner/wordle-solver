@@ -26,7 +26,7 @@ export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      //initial variables
+      //initial state
       words: [null, null, null, null, null, null], //list of guessed words
       wordIsValid: null, //flag for error styling
       wordPos: 0, //current word index
@@ -357,8 +357,9 @@ export default class App extends React.Component {
     colorsCopy[tileIndex[0]][tileIndex[1]] = ""; //clear stored colour for clicked tile
     let wordsCopy = this.state.words;
     wordsCopy[this.state.wordPos] = null; //clear current word
-    this.setState({ words: wordsCopy, colors: colorsCopy }, () =>
-      this.initColoring() //function will now find tile with missing colour
+    this.setState(
+      { words: wordsCopy, colors: colorsCopy },
+      () => this.initColoring() //function will now find tile with missing colour
     );
   };
 
